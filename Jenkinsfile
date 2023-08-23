@@ -1,19 +1,8 @@
 node {
-    def dockerImage
-
-    stage('Checkout') {
-        checkout scm
-    }
-
-    stage('Build') {
-        dockerImage = docker.image('node:16-buster-slim').run('-p 3000:3000')
-
-        try {
-            docker.image(dockerImage.id).inside {
-                sh 'npm install'
-            }
-        } finally {
-            dockerImage.stop()
+    docker.image('node:16-buster-slim').inside('-p 3000:3000'){
+        stage('Build') {
+            checkout scm
+            sh 'npm install'
         }
     }
 
