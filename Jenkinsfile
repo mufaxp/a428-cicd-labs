@@ -1,21 +1,20 @@
-node {
-    def dockerImage
-
-    stage('Checkout') {
-        checkout scm
+pipeline {
+    agent {
+        docker {
+            image 'node:16-buster-slim' 
+            args '-p 3000:3000' 
+        }
     }
-
-    stage('Build and Run') {
-        dockerImage = docker.image('node:16-buster-slim').run('-p 3000:3000')
-        
-        try {
-            // Inside the container
-            docker.image(dockerImage.id).inside {
+    stages {
+        stage('Build') { 
+            steps {
                 sh 'npm install'
             }
-        } finally {
-            // Stop and clean up the container
-            dockerImage.stop()
+        }
+        stage('Test') {
+            steps {
+                sh './jenkins/scripts/test.sh'
+            }
         }
     }
 }
