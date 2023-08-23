@@ -6,15 +6,11 @@ node {
         }
     }
 
-    stage('Test') {
-        try {
-            dockerImage = docker.image('node:16-buster-slim').run('-p 3000:3000')
-
-            docker.image(dockerImage.id).inside {
+        stage('Test') {
+        steps {
+            script {
                 sh './jenkins/scripts/test.sh'
             }
-        } finally {
-            dockerImage.stop()
         }
     }
 }
