@@ -18,8 +18,10 @@ node {
                 id: 'deploy-approval',
                 message: 'Lanjutkan ke tahap Deploy?',
                 parameters: [
-                    choice(name: 'ACTION', choices: 'Proceed\nAbort', description: 'Pilih tindakan', defaultValue: 'Abort')
-                ]
+                    [$class: 'ButtonParameterDefinition', name: 'Proceed', value: 'Proceed'],
+                    [$class: 'ButtonParameterDefinition', name: 'Abort', value: 'Abort']
+                ],
+                submitterParameter: 'ACTION'
             )
 
             if (userApproval == 'Proceed') {
